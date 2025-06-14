@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayTube</title>
+    <link rel="icon" href="https://youtube.com/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --yt-red: #ff0000;
+            --yt-dark: #0f0f0f;
+            --yt-dark-secondary: #272727;
+            --yt-light: #f1f1f1;
+            --yt-light-secondary: #aaaaaa;
+            --yt-blue: #3ea6ff;
+            --yt-success: #4CAF50;
+            --yt-error: #ff4e45;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', Arial, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--yt-dark);
+            color: var(--yt-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        /* YouTube-like header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            height: 56px;
+            background-color: var(--yt-dark);
+            border-bottom: 1px solid var(--yt-dark-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            min-width: 140px;
+        }
+
+        .logo-icon {
+            color: var(--yt-red);
+            font-size: 2rem;
+            margin-right: 5px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 640px;
+            margin: 0 30px;
+        }
+
+        .search-input {
+            flex: 1;
+            height: 40px;
+            padding: 0 16px;
+            background: var(--yt-dark);
+            border: 1px solid var(--yt-dark-secondary);
+            border-radius: 20px 0 0 20px;
+            color: white;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .search-button {
+            height: 40px;
+            width: 64px;
+            background: var(--yt-dark-secondary);
+            border: 1px solid var(--yt-dark-secondary);
+            border-radius: 0 20px 20px 0;
+            color: var(--yt-light-secondary);
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background: var(--yt-dark);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 140px;
+            justify-content: flex-end;
+        }
+
+        .user-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--yt-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .language-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .language-toggle span {
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            z-index: 1;
+            color: var(--yt-light-secondary);
+        }
+
+        .language-toggle .active {
+            color: white;
+        }
+
+        .language-toggle::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background-color: var(--yt-red);
+            border-radius: 50px;
+            transition: transform 0.3s ease;
+            transform: translateX(0%);
+        }
+
+        .language-toggle.zh::after {
+            transform: translateX(100%);
+        }
+
+        /* Main content */
+        .main-container {
+            display: flex;
+            flex: 1;
+        }
+
+        /* Sidebar - YouTube style */
+        .sidebar {
+            width: 240px;
+            background-color: var(--yt-dark);
+            padding: 12px 0;
+            flex-shrink: 0;
+            border-right: 1px solid var(--yt-dark-secondary);
+            overflow-y: auto;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: var(--yt-light);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .sidebar-item:hover {
+            background-color: var(--yt-dark-secondary);
+        }
+
+        .sidebar-item i {
+            margin-right: 24px;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background-color: var(--yt-dark-secondary);
+            margin: 12px 0;
+        }
+
+        /* Content area */
+        .content {
+            flex: 1;
+            padding: 24px;
+            background-color: var(--yt-dark);
+            overflow-y: auto;
+        }
+
+        /* Payment container - YouTube card style */
+        .payment-container {
+            background-color: var(--yt-dark-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .payment-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-left: 16px;
+        }
+
+        .product-info {
+            display: flex;
+            margin-bottom: 24px;
+        }
+
+        .product-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            background-color: var(--yt-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: var(--yt-red);
+            flex-shrink: 0;
+        }
+
+        .product-details {
+            flex: 1;
+            padding-left: 24px;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .product-description {
+            color: var(--yt-light-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .price-options {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .price-option {
+            flex: 1;
+            padding: 16px;
+            border-radius: 8px;
+            background-color: var(--yt-dark);
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .price-option:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .price-option.selected {
+            border-color: var(--yt-red);
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+
+        .price-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .price-label {
+            font-size: 0.8rem;
+            color: var(--yt-light-secondary);
+            margin-top: 4px;
+        }
+
+        .wallet-section {
+            margin-top: 24px;
+            display: none;
+        }
+
+        .wallet-info {
+            background-color: var(--yt-dark);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .wallet-icon {
+            margin-right: 12px;
+            color: var(--yt-blue);
+            font-size: 1.5rem;
+        }
+
+        .wallet-address {
+            font-family: monospace;
+            word-break: break-all;
+            color: white;
+        }
+
+        .btn {
+            background-color: var(--yt-red);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 2px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background-color: #cc0000;
+        }
+
+        .btn:disabled {
+            background-color: var(--yt-dark-secondary);
+            color: var(--yt-light-secondary);
+            cursor: not-allowed;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .network-info {
+            background-color: var(--yt-dark);
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 16px;
+            color: var(--yt-light-secondary);
+        }
+
+        .network-info i {
+            margin-right: 8px;
+            color: var(--yt-blue);
+        }
+
+        .status-message {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 4px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .success {
+            background-color: rgba(76, 175, 80, 0.2);
+            border-left: 4px solid var(--yt-success);
+            color: #a5d6a7;
+        }
+
+        .error {
+            background-color: rgba(255, 78, 69, 0.2);
+            border-left: 4px solid var(--yt-error);
+            color: #ffab91;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .transaction-details {
+            margin-top: 24px;
+            background-color: var(--yt-dark);
+            border-radius: 8px;
+            padding: 16px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            width: 120px;
+            color: var(--yt-light-secondary);
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            flex: 1;
+            color: white;
+        }
+
+        .monospace {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 2px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-success {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .hash-container {
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--yt-blue);
+            cursor: pointer;
+            margin-left: 8px;
+            padding: 4px;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn:hover {
+            color: var(--yt-light);
+        }
+
+        .explorer-link {
+            display: inline-block;
+            margin-top: 8px;
+            color: var(--yt-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .explorer-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            padding: 24px;
+            text-align: center;
+            color: var(--yt-light-secondary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--yt-dark-secondary);
+        }
+
+        .footer a {
+            color: var(--yt-blue);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .payment-container {
+                padding: 16px;
+            }
+            
+            .product-info {
+                flex-direction: column;
+            }
+            
+            .product-details {
+                padding-left: 0;
+                padding-top: 16px;
+            }
+            
+            .price-options {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 0 8px;
+            }
+            
+            .search-container {
+                display: none;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .detail-label {
+                margin-bottom: 4px;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- YouTube-like header -->
+    <div class="header">
+        <div class="logo-container">
+            <i class="fab fa-youtube logo-icon"></i>
+            <span class="logo-text">PayTube</span>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search..." id="search-input">
+            <button class="search-button" id="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        
+        <div class="user-actions">
+            <div class="language-toggle" id="language-toggle">
+                <span class="active" id="lang-en">EN</span>
+                <span id="lang-zh">中文</span>
+            </div>
+            <div class="user-icon">L</div>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <!-- YouTube-like sidebar -->
+        <div class="sidebar">
+            
+            <a href="https://linus-shyu.github.io/" class="sidebar-item">
+                <i class="fas fa-home"></i>
+                <span>About</span>
+            </a>
+
+            <div class="sidebar-divider"></div>
+
+            <a href="https://space.bilibili.com/411591950" target="_blank" class="sidebar-item">
+                <i class="fab fa-bilibili"></i>
+                <span>Bilibili</span>
+            </a>
+
+            <a href="https://www.youtube.com/channel/UC4KtR-YsWDfWtikRGOZb58Q" target="_blank" class="sidebar-item">
+                <i class="fas fa-play-circle"></i>
+                <span>YouTube</span>
+            </a>
+
+            <a href="https://github.com/Linus-Shyu" target="_blank" class="sidebar-item">
+                <i class="fab fa-github"></i>
+                <span>Github</span>
+            </a>
+
+            <a href="https://x.com/Linus_Shyu" target="_blank" class="sidebar-item">
+                <i class="fab fa-twitter"></i>
+                <span>Twitter</span>
+            </a>
+
+            <a href="https://www.linkedin.com/in/faxin-xu-012416329/" target="_blank" class="sidebar-item">
+                <i class="fab fa-linkedin"></i>
+                <span>LinkedIn</span>
+            </a>
+
+            <a href="https://www.instagram.com/linusshyu/" target="_blank" class="sidebar-item">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
+            </a>   
+
+        </div>
+        
+        <!-- Main content area -->
+        <div class="content">
+            <div class="payment-container">
+                <div class="payment-header">
+                    <i class="fab fa-ethereum" style="font-size: 2rem; color: var(--yt-blue);"></i>
+                    <h1 class="payment-title" id="title">Ethereum Payment</h1>
+                </div>
+                
+                <div class="product-info">
+                    <div class="product-image">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="product-details">
+                        <div class="product-title" id="product-title">Premium NFT Collection</div>
+                        <div class="product-description" id="product-description">Exclusive digital artwork with blockchain verification</div>
+                        
+                        <div class="price-options">
+                            <div class="price-option selected" data-amount="0.01">
+                                <div class="price-amount">0.01 ETH</div>
+                                <div class="price-label" id="price-label-basic">Basic</div>
+                            </div>
+                            <div class="price-option" data-amount="0.05">
+                                <div class="price-amount">0.05 ETH</div>
+                                <div class="price-label" id="price-label-standard">Standard</div>
+                            </div>
+                            <div class="price-option" data-amount="0.1">
+                                <div class="price-amount">0.1 ETH</div>
+                                <div class="price-label" id="price-label-premium">Premium</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="wallet-section" class="wallet-section">
+                    <div class="wallet-info">
+                        <i class="fas fa-wallet wallet-icon"></i>
+                        <span class="wallet-address" id="wallet-address"></span>
+                    </div>
+                    <button id="pay-button" class="btn">
+                        <i class="fas fa-paper-plane"></i>
+                        <span id="pay-button-text">Complete Payment</span>
+                    </button>
+                    <div class="network-info" id="network-info">
+                        <i class="fas fa-network-wired"></i> Network: <span id="network-name">Not connected</span>
+                    </div>
+                </div>
+                
+                <button id="connect-button" class="btn" style="display: none;">
+                    <i class="fas fa-plug"></i>
+                    <span id="connect-button-text">Connect Wallet</span>
+                </button>
+                
+                <div id="status-message" class="status-message"></div>
+                
+                <div id="transaction-details" class="transaction-details" style="display: none;">
+                    <div class="detail-row">
+                        <span class="detail-label" id="tx-status-label">Transaction Status:</span>
+                        <span id="tx-status" class="detail-value status-badge"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label" id="tx-hash-label">Transaction Hash:</span>
+                        <div class="hash-container">
+                            <span id="tx-hash" class="detail-value monospace"></span>
+                            <button id="copy-hash" class="copy-btn" title="Copy Hash">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <a id="tx-link" target="_blank" class="explorer-link">
+                        <i class="fas fa-external-link-alt"></i> <span id="view-on-explorer">View on block explorer</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        &copy; <span id="copyright-year"></span> <a href="https://linus-shyu.github.io/" target="_blank">Linus Shyu</a>. All rights reserved.
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script>
+        // Language support
+        const translations = {
+            en: {
+                title: "Ethereum Payment",
+                productTitle: "Support Linus's Open Source Work",
+                productDesc: "Every penny you pay will be used for the projects he develops",
+                priceBasic: "Gas Fee Refuel Pack",
+                priceStandard: "Enough to rm -rf and sprint 5 feet",
+                pricePremium: "Might Make Vitalik Crack a Smile",
+                connectBtn: "Connect Wallet",
+                payBtn: "Complete Payment",
+                notConnected: "Not connected",
+                connectRequest: "Please connect your wallet",
+                connectSuccess: "Wallet connected successfully",
+                paymentProcessing: "Processing payment...",
+                paymentSuccess: "Payment successful! Transaction hash: ",
+                paymentError: "Payment failed: ",
+                installMetaMask: "Please install MetaMask to continue",
+                switchNetwork: "Please switch to Ethereum Mainnet",
+                txStatus: "Transaction Status:",
+                txHash: "Transaction Hash:",
+                viewExplorer: "View on block explorer",
+                copied: "Copied!",
+                pending: "Pending",
+                confirmed: "Confirmed"
+            },
+            zh: {
+                title: "以太坊支付",
+                productTitle: "支持老许的开源工作",
+                productDesc: "每一分钱都将用于他开发的项目",
+                priceBasic: "Gas费回血包",
+                priceStandard: "够删库后跑路5米",
+                pricePremium: "足够让Vitalik微笑",
+                connectBtn: "连接钱包",
+                payBtn: "完成支付",
+                notConnected: "未连接",
+                connectRequest: "请连接您的钱包",
+                connectSuccess: "钱包连接成功",
+                paymentProcessing: "支付处理中...",
+                paymentSuccess: "支付成功! 交易哈希: ",
+                paymentError: "支付失败: ",
+                installMetaMask: "请安装MetaMask钱包继续",
+                switchNetwork: "请切换到以太坊主网",
+                txStatus: "交易状态:",
+                txHash: "交易哈希:",
+                viewExplorer: "在区块浏览器查看",
+                copied: "已复制!",
+                pending: "处理中",
+                confirmed: "已确认"
+            }
+        };
+
+        let currentLang = 'en';
+        const langToggle = document.getElementById('language-toggle');
+        const langToggleEn = document.getElementById('lang-en');
+        const langToggleZh = document.getElementById('lang-zh');
+        let selectedAmount = "0.01"; // Default selected amount
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('title').textContent = translations[lang].title;
+            document.getElementById('product-title').textContent = translations[lang].productTitle;
+            document.getElementById('product-description').textContent = translations[lang].productDesc;
+            document.getElementById('price-label-basic').textContent = translations[lang].priceBasic;
+            document.getElementById('price-label-standard').textContent = translations[lang].priceStandard;
+            document.getElementById('price-label-premium').textContent = translations[lang].pricePremium;
+            document.getElementById('connect-button-text').textContent = translations[lang].connectBtn;
+            document.getElementById('pay-button-text').textContent = translations[lang].payBtn;
+            document.getElementById('network-name').textContent = translations[lang].notConnected;
+            document.getElementById('tx-status-label').textContent = translations[lang].txStatus;
+            document.getElementById('tx-hash-label').textContent = translations[lang].txHash;
+            document.getElementById('view-on-explorer').textContent = translations[lang].viewExplorer;
+            
+            // Update language toggle active state
+            if (lang === 'en') {
+                langToggle.classList.remove('zh');
+                langToggleEn.classList.add('active');
+                langToggleZh.classList.remove('active');
+            } else {
+                langToggle.classList.add('zh');
+                langToggleEn.classList.remove('active');
+                langToggleZh.classList.add('active');
+            }
+        }
+
+        langToggleEn.addEventListener('click', () => setLanguage('en'));
+        langToggleZh.addEventListener('click', () => setLanguage('zh'));
+
+        // Search functionality
+        document.getElementById('search-button').addEventListener('click', () => {
+            const query = document.getElementById('search-input').value;
+            if (query.trim()) {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+            }
+        });
+
+        // Allow pressing Enter in search input
+        document.getElementById('search-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('search-button').click();
+            }
+        });
+
+        // Price selection
+        const priceOptions = document.querySelectorAll('.price-option');
+        priceOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                priceOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedAmount = option.dataset.amount;
+            });
+        });
+
+        // Ethereum payment functionality
+        let web3;
+        let currentAccount = null;
+        let currentNetwork = null;
+
+        document.getElementById('pay-button').addEventListener('click', makePayment);
+        document.getElementById('copy-hash').addEventListener('click', copyTxHash);
+
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    showStatus(translations[currentLang].installMetaMask, 'error');
+                    return;
+                }
+
+                web3 = new Web3(window.ethereum);
+                
+                // Request account access
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                currentAccount = accounts[0];
+                
+                // Get network ID
+                const chainId = await web3.eth.getChainId();
+                updateNetworkInfo(chainId);
+                
+                // Display wallet info
+                const shortAddress = `${currentAccount.substring(0, 6)}...${currentAccount.substring(currentAccount.length - 4)}`;
+                document.getElementById('wallet-address').textContent = shortAddress;
+                document.getElementById('wallet-section').style.display = 'block';
+                document.getElementById('connect-button').style.display = 'none';
+                
+                showStatus(translations[currentLang].connectSuccess, 'success');
+                
+                // Listen for account changes
+                window.ethereum.on('accountsChanged', (newAccounts) => {
+                    if (newAccounts.length === 0) {
+                        // Wallet disconnected
+                        document.getElementById('wallet-section').style.display = 'none';
+                        document.getElementById('connect-button').style.display = 'block';
+                        showStatus(translations[currentLang].connectRequest, 'error');
+                    } else {
+                        // Account changed
+                        currentAccount = newAccounts[0];
+                        const shortAddr = `${currentAccount.substring(0, 6)}...${currentAccount.substring(currentAccount.length - 4)}`;
+                        document.getElementById('wallet-address').textContent = shortAddr;
+                    }
+                });
+                
+                // Listen for chain changes
+                window.ethereum.on('chainChanged', (chainId) => {
+                    window.location.reload();
+                });
+                
+            } catch (error) {
+                console.error('Connection error:', error);
+                showStatus(`${translations[currentLang].paymentError}${error.message}`, 'error');
+            }
+        }
+
+        function updateNetworkInfo(chainId) {
+            const networks = {
+                1: 'Ethereum Mainnet',
+                5: 'Goerli Testnet',
+                11155111: 'Sepolia Testnet',
+                137: 'Polygon Mainnet',
+                80001: 'Mumbai Testnet'
+            };
+            
+            currentNetwork = chainId;
+            const networkName = networks[chainId] || `Unknown Network (${chainId})`;
+            document.getElementById('network-name').textContent = networkName;
+        }
+
+        async function makePayment() {
+            try {
+                const payButton = document.getElementById('pay-button');
+                const weiValue = web3.utils.toWei(selectedAmount, 'ether');
+                
+                // Payment will be sent to Linus Shyu's wallet
+                const receiverAddress = '0xdc95E9281cfDCB3e1dFD85103585230423b07b55';
+                
+                // Disable button and show loading
+                payButton.disabled = true;
+                payButton.innerHTML = `<div class="loading"></div>${translations[currentLang].paymentProcessing}`;
+                
+                showStatus(translations[currentLang].paymentProcessing, '');
+                
+                // Send transaction
+                const txHash = await web3.eth.sendTransaction({
+                    from: currentAccount,
+                    to: receiverAddress,
+                    value: weiValue
+                });
+                
+                showTransactionDetails(txHash.transactionHash, 'pending');
+                showStatus(`${translations[currentLang].paymentSuccess}${txHash.transactionHash}`, 'success');
+                
+                // Check for transaction confirmation
+                const receipt = await web3.eth.getTransactionReceipt(txHash.transactionHash);
+                if (receipt && receipt.status) {
+                    showTransactionDetails(txHash.transactionHash, 'confirmed');
+                }
+                
+                // Reset button
+                payButton.disabled = false;
+                payButton.innerHTML = `<i class="fas fa-paper-plane"></i>${translations[currentLang].payBtn}`;
+                
+            } catch (error) {
+                console.error('Payment error:', error);
+                showStatus(`${translations[currentLang].paymentError}${error.message}`, 'error');
+                
+                // Reset button
+                document.getElementById('pay-button').disabled = false;
+                document.getElementById('pay-button').innerHTML = `<i class="fas fa-paper-plane"></i>${translations[currentLang].payBtn}`;
+            }
+        }
+
+        function showTransactionDetails(txHash, status) {
+            const txDetails = document.getElementById('transaction-details');
+            const txStatus = document.getElementById('tx-status');
+            const txHashElement = document.getElementById('tx-hash');
+            const txLink = document.getElementById('tx-link');
+            
+            // Update transaction status
+            txStatus.textContent = status === 'pending' ? 
+                translations[currentLang].pending : 
+                translations[currentLang].confirmed;
+            txStatus.className = `detail-value status-badge status-${status}`;
+            
+            // Display full transaction hash
+            txHashElement.textContent = txHash;
+            
+            // Set block explorer link
+            const explorerUrls = {
+                1: 'https://etherscan.io/tx/',
+                5: 'https://goerli.etherscan.io/tx/',
+                11155111: 'https://sepolia.etherscan.io/tx/',
+                137: 'https://polygonscan.com/tx/',
+                80001: 'https://mumbai.polygonscan.com/tx/'
+            };
+            
+            const explorerUrl = explorerUrls[currentNetwork] || 'https://etherscan.io/tx/';
+            txLink.href = explorerUrl + txHash;
+            
+            // Show transaction details section
+            txDetails.style.display = 'block';
+            
+            // Scroll to transaction details
+            setTimeout(() => {
+                txDetails.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function copyTxHash() {
+            const txHash = document.getElementById('tx-hash').textContent;
+            navigator.clipboard.writeText(txHash).then(() => {
+                const copyBtn = document.getElementById('copy-hash');
+                const originalHtml = copyBtn.innerHTML;
+                copyBtn.innerHTML = `<i class="fas fa-check"></i>`;
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHtml;
+                }, 2000);
+            });
+        }
+
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('status-message');
+            statusElement.textContent = message;
+            statusElement.className = 'status-message';
+            
+            if (type === 'success') {
+                statusElement.classList.add('success');
+            } else if (type === 'error') {
+                statusElement.classList.add('error');
+            }
+            
+            statusElement.style.display = 'block';
+            
+            // Auto-hide success messages after 5 seconds
+            if (type === 'success' && !message.includes('Payment successful')) {
+                setTimeout(() => {
+                    statusElement.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Set copyright year
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+        // Initialize - auto connect wallet
+        window.addEventListener('load', async () => {
+            // Set language first
+            setLanguage(currentLang);
+            
+            if (typeof window.ethereum !== 'undefined') {
+                web3 = new Web3(window.ethereum);
+                
+                try {
+                    // Auto connect wallet
+                    await connectWallet();
+                    
+                    // Check if already connected
+                    const accounts = await web3.eth.getAccounts();
+                    if (accounts.length > 0) {
+                        currentAccount = accounts[0];
+                        const shortAddress = `${currentAccount.substring(0, 6)}...${currentAccount.substring(currentAccount.length - 4)}`;
+                        document.getElementById('wallet-address').textContent = shortAddress;
+                        document.getElementById('wallet-section').style.display = 'block';
+                        document.getElementById('connect-button').style.display = 'none';
+                        
+                        // Get network
+                        const chainId = await web3.eth.getChainId();
+                        updateNetworkInfo(chainId);
+                    }
+                } catch (error) {
+                    console.error('Initial connection check failed:', error);
+                    document.getElementById('connect-button').style.display = 'block';
+                }
+            } else {
+                document.getElementById('connect-button').style.display = 'block';
+                showStatus(translations[currentLang].installMetaMask, 'error');
+            }
+        });
+    </script>
+</body>
+</html>
