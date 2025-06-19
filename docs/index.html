@@ -554,6 +554,16 @@
                 display: none;
             }
 
+            .search-container {
+                margin: 0 10px;
+                max-width: 200px;
+            }
+
+            .search-input {
+                padding: 0 10px;
+                font-size: 14px;
+            }
+
             .payment-container {
                 padding: 16px;
             }
@@ -581,10 +591,6 @@
         }
 
         @media (max-width: 575px) {
-            .search-container {
-                display: none;
-            }
-
             .user-actions {
                 gap: 8px;
             }
@@ -624,6 +630,12 @@
 
             .mobile-menu-btn {
                 display: block;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .search-container {
+                display: none;
             }
         }
 
