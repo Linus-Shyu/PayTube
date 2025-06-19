@@ -182,6 +182,7 @@
             color: var(--yt-light);
             cursor: pointer;
             text-decoration: none;
+            min-height: 48px;
         }
 
         .sidebar-item:hover {
@@ -279,6 +280,7 @@
             text-align: center;
             cursor: pointer;
             border: 1px solid transparent;
+            min-height: 48px;
         }
 
         .price-option:hover {
@@ -342,6 +344,7 @@
             justify-content: center;
             align-items: center;
             text-transform: uppercase;
+            min-height: 48px;
         }
 
         .btn:hover {
@@ -516,9 +519,28 @@
             text-decoration: underline;
         }
 
+        /* Mobile menu button */
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            padding: 12px;
+            cursor: pointer;
+            color: white;
+        }
+
         /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .sidebar {
+        @media (max-width: 991px) {
+            .payment-container {
+                max-width: 90%;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .header {
+                padding: 0 8px;
+            }
+            
+            .logo-text {
                 display: none;
             }
             
@@ -535,18 +557,30 @@
                 padding-top: 16px;
             }
             
-            .price-options {
-                flex-direction: column;
+            .payment-title {
+                font-size: 1.2rem;
+            }
+            
+            .product-title {
+                font-size: 1rem;
+            }
+            
+            body {
+                font-size: 14px;
             }
         }
 
-        @media (max-width: 480px) {
-            .header {
-                padding: 0 8px;
-            }
-            
+        @media (max-width: 575px) {
             .search-container {
                 display: none;
+            }
+            
+            .user-actions {
+                gap: 8px;
+            }
+            
+            .price-options {
+                flex-direction: column;
             }
             
             .detail-row {
@@ -558,12 +592,44 @@
                 margin-bottom: 4px;
                 width: auto;
             }
+            
+            .sidebar {
+                display: none;
+                position: fixed;
+                top: 56px;
+                left: -240px;
+                height: calc(100vh - 56px);
+                transition: left 0.3s ease;
+                z-index: 90;
+            }
+            
+            .sidebar.active {
+                left: 0;
+                display: block;
+            }
+            
+            .payment-container {
+                padding: 12px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* Prevent zoom on input focus on mobile */
+        input, button, select, textarea {
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
     <!-- YouTube-like header -->
     <div class="header">
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+        
         <div class="logo-container">
             <i class="fab fa-youtube logo-icon"></i>
             <span class="logo-text">PayTube</span>
@@ -695,7 +761,7 @@
                     </div>
                 </div>
                 
-                <button id="connect-button" class="btn" style="display: none;">
+                <button id="connect-button" class="btn">
                     <i class="fas fa-plug"></i>
                     <span id="connect-button-text">Connect Wallet</span>
                 </button>
@@ -843,12 +909,31 @@
             });
         });
 
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            
+            if (sidebar.classList.contains('active') && 
+                !sidebar.contains(event.target) && 
+                event.target !== mobileBtn && 
+                !mobileBtn.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
         // Ethereum payment functionality
         let web3;
         let currentAccount = null;
         let currentNetwork = null;
 
         document.getElementById('pay-button').addEventListener('click', makePayment);
+        document.getElementById('connect-button').addEventListener('click', connectWallet);
         document.getElementById('copy-hash').addEventListener('click', copyTxHash);
 
         async function connectWallet() {
