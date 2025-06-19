@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -409,7 +410,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .transaction-details {
@@ -421,8 +424,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .detail-row {
@@ -539,32 +549,32 @@
             .header {
                 padding: 0 8px;
             }
-            
+
             .logo-text {
                 display: none;
             }
-            
+
             .payment-container {
                 padding: 16px;
             }
-            
+
             .product-info {
                 flex-direction: column;
             }
-            
+
             .product-details {
                 padding-left: 0;
                 padding-top: 16px;
             }
-            
+
             .payment-title {
                 font-size: 1.2rem;
             }
-            
+
             .product-title {
                 font-size: 1rem;
             }
-            
+
             body {
                 font-size: 14px;
             }
@@ -574,25 +584,25 @@
             .search-container {
                 display: none;
             }
-            
+
             .user-actions {
                 gap: 8px;
             }
-            
+
             .price-options {
                 flex-direction: column;
             }
-            
+
             .detail-row {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .detail-label {
                 margin-bottom: 4px;
                 width: auto;
             }
-            
+
             .sidebar {
                 display: none;
                 position: fixed;
@@ -602,46 +612,50 @@
                 transition: left 0.3s ease;
                 z-index: 90;
             }
-            
+
             .sidebar.active {
                 left: 0;
                 display: block;
             }
-            
+
             .payment-container {
                 padding: 12px;
             }
-            
+
             .mobile-menu-btn {
                 display: block;
             }
         }
 
         /* Prevent zoom on input focus on mobile */
-        input, button, select, textarea {
+        input,
+        button,
+        select,
+        textarea {
             font-size: 16px;
         }
     </style>
 </head>
+
 <body>
     <!-- YouTube-like header -->
     <div class="header">
         <div class="mobile-menu-btn" id="mobile-menu-btn">
             <i class="fas fa-bars"></i>
         </div>
-        
+
         <div class="logo-container">
             <i class="fab fa-youtube logo-icon"></i>
             <span class="logo-text">PayTube</span>
         </div>
-        
+
         <div class="search-container">
             <input type="text" class="search-input" placeholder="Search..." id="search-input">
             <button class="search-button" id="search-button">
                 <i class="fas fa-search"></i>
             </button>
         </div>
-        
+
         <div class="user-actions">
             <div class="language-toggle" id="language-toggle">
                 <span class="active" id="lang-en">EN</span>
@@ -650,11 +664,11 @@
             <div class="user-icon">L</div>
         </div>
     </div>
-    
+
     <div class="main-container">
         <!-- YouTube-like sidebar -->
         <div class="sidebar">
-            
+
             <a href="https://linus-shyu.github.io/" class="sidebar-item">
                 <i class="fas fa-home"></i>
                 <span>About</span>
@@ -672,7 +686,8 @@
                 <span>YouTube</span>
             </a>
 
-            <a href="https://www.xiaohongshu.com/user/profile/63bbcfe80000000026005001?xsec_token=YBg_Dx2-9FNUEE-LRQ-QGPluK2sNdlBnxphOzWvvfv4aQ=&xsec_source=app_share&xhsshare=CopyLink&appuid=63bbcfe80000000026005001&apptime=1749996151&&share_id=b645158616f7419584e4edbd5cac86d7" target="_blank" class="sidebar-item">
+            <a href="https://www.xiaohongshu.com/user/profile/63bbcfe80000000026005001?xsec_token=YBg_Dx2-9FNUEE-LRQ-QGPluK2sNdlBnxphOzWvvfv4aQ=&xsec_source=app_share&xhsshare=CopyLink&appuid=63bbcfe80000000026005001&apptime=1749996151&&share_id=b645158616f7419584e4edbd5cac86d7"
+                target="_blank" class="sidebar-item">
                 <img src="https://www.xiaohongshu.com/favicon.ico" alt="RedNote" width="20">
                 <span style="margin-left: 24px;">RedNote</span>
             </a>
@@ -700,7 +715,7 @@
             <a href="https://www.instagram.com/linusshyu/" target="_blank" class="sidebar-item">
                 <i class="fab fa-instagram logo-icon" style="color: #e1306c;"></i>
                 <span>Instagram</span>
-            </a>   
+            </a>
 
             <a href="https://codeforces.com/profile/TechNerd233" target="_blank" class="sidebar-item">
                 <img src="https://codeforces.org/s/0/favicon-32x32.png" alt="Codeforces Logo" width="20">
@@ -710,10 +725,10 @@
             <a href="https://linus-shyu.github.io/img/BTC.jpg" target="_blank" class="sidebar-item">
                 <i class="fab fa-bitcoin logo-icon" style="color: #f7931a;"></i>
                 <span>BitCoin</span>
-            </a>   
+            </a>
 
         </div>
-        
+
         <!-- Main content area -->
         <div class="content">
             <div class="payment-container">
@@ -721,15 +736,16 @@
                     <i class="fab fa-ethereum" style="font-size: 2rem; color: var(--yt-blue);"></i>
                     <h1 class="payment-title" id="title">Ethereum Payment</h1>
                 </div>
-                
+
                 <div class="product-info">
                     <div class="product-image">
                         <i class="fas fa-cube"></i>
                     </div>
                     <div class="product-details">
                         <div class="product-title" id="product-title">Premium NFT Collection</div>
-                        <div class="product-description" id="product-description">Exclusive digital artwork with blockchain verification</div>
-                        
+                        <div class="product-description" id="product-description">Exclusive digital artwork with
+                            blockchain verification</div>
+
                         <div class="price-options">
                             <div class="price-option selected" data-amount="0.01">
                                 <div class="price-amount">0.01 ETH</div>
@@ -746,7 +762,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div id="wallet-section" class="wallet-section">
                     <div class="wallet-info">
                         <i class="fas fa-wallet wallet-icon"></i>
@@ -760,14 +776,14 @@
                         <i class="fas fa-network-wired"></i> Network: <span id="network-name">Not connected</span>
                     </div>
                 </div>
-                
+
                 <button id="connect-button" class="btn">
                     <i class="fas fa-plug"></i>
                     <span id="connect-button-text">Connect Wallet</span>
                 </button>
-                
+
                 <div id="status-message" class="status-message"></div>
-                
+
                 <div id="transaction-details" class="transaction-details" style="display: none;">
                     <div class="detail-row">
                         <span class="detail-label" id="tx-status-label">Transaction Status:</span>
@@ -783,15 +799,17 @@
                         </div>
                     </div>
                     <a id="tx-link" target="_blank" class="explorer-link">
-                        <i class="fas fa-external-link-alt"></i> <span id="view-on-explorer">View on block explorer</span>
+                        <i class="fas fa-external-link-alt"></i> <span id="view-on-explorer">View on block
+                            explorer</span>
                     </a>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="footer">
-        &copy; <span id="copyright-year"></span> <a href="https://linus-shyu.github.io/" target="_blank">Linus Shyu</a>. All rights reserved.
+        &copy; <span id="copyright-year"></span> <a href="https://linus-shyu.github.io/" target="_blank">Linus Shyu</a>.
+        All rights reserved.
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
@@ -868,7 +886,7 @@
             document.getElementById('tx-status-label').textContent = translations[lang].txStatus;
             document.getElementById('tx-hash-label').textContent = translations[lang].txHash;
             document.getElementById('view-on-explorer').textContent = translations[lang].viewExplorer;
-            
+
             // Update language toggle active state
             if (lang === 'en') {
                 langToggle.classList.remove('zh');
@@ -884,18 +902,23 @@
         langToggleEn.addEventListener('click', () => setLanguage('en'));
         langToggleZh.addEventListener('click', () => setLanguage('zh'));
 
-        // Search functionality
         document.getElementById('search-button').addEventListener('click', () => {
             const query = document.getElementById('search-input').value;
             if (query.trim()) {
-                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+                window.open(`https://www.wolframalpha.com/input?i=${encodeURIComponent(query)}`, '_blank');
+            } else {
+                window.open('https://linus-shyu.github.io/PayTube/', '_blank');
             }
         });
 
-        // Allow pressing Enter in search input
         document.getElementById('search-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                document.getElementById('search-button').click();
+                const query = document.getElementById('search-input').value;
+                if (query.trim()) {
+                    window.open(`https://www.wolframalpha.com/input?i=${encodeURIComponent(query)}`, '_blank');
+                } else {
+                    window.open('https://linus-shyu.github.io/PayTube/', '_blank');
+                }
             }
         });
 
@@ -910,18 +933,18 @@
         });
 
         // Mobile menu toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+        document.getElementById('mobile-menu-btn').addEventListener('click', function () {
             document.querySelector('.sidebar').classList.toggle('active');
         });
-        
+
         // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             const sidebar = document.querySelector('.sidebar');
             const mobileBtn = document.getElementById('mobile-menu-btn');
-            
-            if (sidebar.classList.contains('active') && 
-                !sidebar.contains(event.target) && 
-                event.target !== mobileBtn && 
+
+            if (sidebar.classList.contains('active') &&
+                !sidebar.contains(event.target) &&
+                event.target !== mobileBtn &&
                 !mobileBtn.contains(event.target)) {
                 sidebar.classList.remove('active');
             }
@@ -944,23 +967,23 @@
                 }
 
                 web3 = new Web3(window.ethereum);
-                
+
                 // Request account access
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 currentAccount = accounts[0];
-                
+
                 // Get network ID
                 const chainId = await web3.eth.getChainId();
                 updateNetworkInfo(chainId);
-                
+
                 // Display wallet info
                 const shortAddress = `${currentAccount.substring(0, 6)}...${currentAccount.substring(currentAccount.length - 4)}`;
                 document.getElementById('wallet-address').textContent = shortAddress;
                 document.getElementById('wallet-section').style.display = 'block';
                 document.getElementById('connect-button').style.display = 'none';
-                
+
                 showStatus(translations[currentLang].connectSuccess, 'success');
-                
+
                 // Listen for account changes
                 window.ethereum.on('accountsChanged', (newAccounts) => {
                     if (newAccounts.length === 0) {
@@ -975,12 +998,12 @@
                         document.getElementById('wallet-address').textContent = shortAddr;
                     }
                 });
-                
+
                 // Listen for chain changes
                 window.ethereum.on('chainChanged', (chainId) => {
                     window.location.reload();
                 });
-                
+
             } catch (error) {
                 console.error('Connection error:', error);
                 showStatus(`${translations[currentLang].paymentError}${error.message}`, 'error');
@@ -995,7 +1018,7 @@
                 137: 'Polygon Mainnet',
                 80001: 'Mumbai Testnet'
             };
-            
+
             currentNetwork = chainId;
             const networkName = networks[chainId] || `Unknown Network (${chainId})`;
             document.getElementById('network-name').textContent = networkName;
@@ -1005,40 +1028,40 @@
             try {
                 const payButton = document.getElementById('pay-button');
                 const weiValue = web3.utils.toWei(selectedAmount, 'ether');
-                
+
                 // Payment will be sent to Linus Shyu's wallet
                 const receiverAddress = '0xdc95E9281cfDCB3e1dFD85103585230423b07b55';
-                
+
                 // Disable button and show loading
                 payButton.disabled = true;
                 payButton.innerHTML = `<div class="loading"></div>${translations[currentLang].paymentProcessing}`;
-                
+
                 showStatus(translations[currentLang].paymentProcessing, '');
-                
+
                 // Send transaction
                 const txHash = await web3.eth.sendTransaction({
                     from: currentAccount,
                     to: receiverAddress,
                     value: weiValue
                 });
-                
+
                 showTransactionDetails(txHash.transactionHash, 'pending');
                 showStatus(`${translations[currentLang].paymentSuccess}${txHash.transactionHash}`, 'success');
-                
+
                 // Check for transaction confirmation
                 const receipt = await web3.eth.getTransactionReceipt(txHash.transactionHash);
                 if (receipt && receipt.status) {
                     showTransactionDetails(txHash.transactionHash, 'confirmed');
                 }
-                
+
                 // Reset button
                 payButton.disabled = false;
                 payButton.innerHTML = `<i class="fas fa-paper-plane"></i>${translations[currentLang].payBtn}`;
-                
+
             } catch (error) {
                 console.error('Payment error:', error);
                 showStatus(`${translations[currentLang].paymentError}${error.message}`, 'error');
-                
+
                 // Reset button
                 document.getElementById('pay-button').disabled = false;
                 document.getElementById('pay-button').innerHTML = `<i class="fas fa-paper-plane"></i>${translations[currentLang].payBtn}`;
@@ -1050,16 +1073,16 @@
             const txStatus = document.getElementById('tx-status');
             const txHashElement = document.getElementById('tx-hash');
             const txLink = document.getElementById('tx-link');
-            
+
             // Update transaction status
-            txStatus.textContent = status === 'pending' ? 
-                translations[currentLang].pending : 
+            txStatus.textContent = status === 'pending' ?
+                translations[currentLang].pending :
                 translations[currentLang].confirmed;
             txStatus.className = `detail-value status-badge status-${status}`;
-            
+
             // Display full transaction hash
             txHashElement.textContent = txHash;
-            
+
             // Set block explorer link
             const explorerUrls = {
                 1: 'https://etherscan.io/tx/',
@@ -1068,13 +1091,13 @@
                 137: 'https://polygonscan.com/tx/',
                 80001: 'https://mumbai.polygonscan.com/tx/'
             };
-            
+
             const explorerUrl = explorerUrls[currentNetwork] || 'https://etherscan.io/tx/';
             txLink.href = explorerUrl + txHash;
-            
+
             // Show transaction details section
             txDetails.style.display = 'block';
-            
+
             // Scroll to transaction details
             setTimeout(() => {
                 txDetails.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1097,15 +1120,15 @@
             const statusElement = document.getElementById('status-message');
             statusElement.textContent = message;
             statusElement.className = 'status-message';
-            
+
             if (type === 'success') {
                 statusElement.classList.add('success');
             } else if (type === 'error') {
                 statusElement.classList.add('error');
             }
-            
+
             statusElement.style.display = 'block';
-            
+
             // Auto-hide success messages after 5 seconds
             if (type === 'success' && !message.includes('Payment successful')) {
                 setTimeout(() => {
@@ -1121,14 +1144,14 @@
         window.addEventListener('load', async () => {
             // Set language first
             setLanguage(currentLang);
-            
+
             if (typeof window.ethereum !== 'undefined') {
                 web3 = new Web3(window.ethereum);
-                
+
                 try {
                     // Auto connect wallet
                     await connectWallet();
-                    
+
                     // Check if already connected
                     const accounts = await web3.eth.getAccounts();
                     if (accounts.length > 0) {
@@ -1137,7 +1160,7 @@
                         document.getElementById('wallet-address').textContent = shortAddress;
                         document.getElementById('wallet-section').style.display = 'block';
                         document.getElementById('connect-button').style.display = 'none';
-                        
+
                         // Get network
                         const chainId = await web3.eth.getChainId();
                         updateNetworkInfo(chainId);
@@ -1153,4 +1176,5 @@
         });
     </script>
 </body>
+
 </html>
